@@ -1,4 +1,5 @@
 test:
   override:
-    - firefox --version
-    - python tests/test_signup.py
+    - git clone https://github.com/jrgm/fxdownload.git
+    - cd fxdownload && git checkout b3fe5d0 && npm i && node fetch.js -c release && cd ..
+    - FIREFOX_BIN=~/firefox-channels/latest/en-US/firefox/firefox-bin python tests/test_signup.py

@@ -1,26 +1,25 @@
+import os
 import unittest
 import page
 import random
 
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 firefox_capabilities = DesiredCapabilities.FIREFOX
 # Disable for now, https://github.com/jgraham/wires/issues/46
-#firefox_capabilities['marionette'] = True
-#firefox_capabilities['binary'] = '/Users/vladikoff/mozilla/mercurial/fx-team/objdir-frontend/dist/Nightly.app/Contents/MacOS/firefox'
-
+if "FIREFOX_BIN" in os.environ:
+    print "Loading custom build..."
+    #firefox_capabilities['marionette'] = True
+    #firefox_capabilities['binary'] = os.environ["FIREFOX_BIN"]
+    binary = FirefoxBinary(os.environ["FIREFOX_BIN"])
 
 from selenium import webdriver
 
-fp = webdriver.FirefoxProfile()
-
-fp.set_preference("browser.download.folderList",2)
-
-
-class PythonOrgSearch(unittest.TestCase):
+class FxaTests(unittest.TestCase):
 
     def setUp(self):
-        self.driver = webdriver.Firefox(capabilities=firefox_capabilities)
+        self.driver = webdriver.Firefox(capabilities=firefox_capabilities, firefox_binary=binary)
         self.driver.implicitly_wait(20)  # seconds
 
     def test_fxa_signup(self):
