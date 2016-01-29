@@ -23,7 +23,7 @@ class PythonOrgSearch(unittest.TestCase):
         self.driver = webdriver.Firefox(capabilities=firefox_capabilities)
         self.driver.implicitly_wait(20)  # seconds
 
-    def test_search_in_python_org(self):
+    def test_fxa_signup(self):
         email = "fxatester" + str(random.random()) + "@restmail.net"
 
         self.driver.get("about:preferences#sync")

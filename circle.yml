@@ -1,0 +1,4 @@
+test:
+  override:
+    - firefox --version
+    - python tests/test_signup.py
