@@ -3,24 +3,21 @@ import unittest
 import page
 import random
 
-from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 firefox_capabilities = DesiredCapabilities.FIREFOX
-# Disable for now, https://github.com/jgraham/wires/issues/46
-if "FIREFOX_BIN" in os.environ:
-    print "Loading custom build..."
-    #firefox_capabilities['marionette'] = True
-    #firefox_capabilities['binary'] = os.environ["FIREFOX_BIN"]
-    binary = FirefoxBinary(os.environ["FIREFOX_BIN"])
+
+print "Loading..."
+firefox_capabilities['marionette'] = True
+firefox_capabilities['binary'] = os.environ["FIREFOX_BIN"]
 
 from selenium import webdriver
 
 class FxaTests(unittest.TestCase):
 
     def setUp(self):
-        self.driver = webdriver.Firefox(capabilities=firefox_capabilities, firefox_binary=binary)
-        self.driver.implicitly_wait(20)  # seconds
+        self.driver = webdriver.Firefox(capabilities=firefox_capabilities)
+        self.driver.implicitly_wait(2)  # seconds
 
     def test_fxa_signup(self):
         email = "fxatester" + str(random.random()) + "@restmail.net"
@@ -30,8 +27,9 @@ class FxaTests(unittest.TestCase):
 
         elem.click()
 
-        self.driver.find_element_by_css_selector("#remote")
-        self.driver.switch_to.frame("remote")
+        el_frame = self.driver.find_element_by_css_selector("#remote")
+        # this below just hangs...
+        self.driver.switch_to_frame(el_frame)
 
         fxa_page = page.FxaPage(self.driver)
         fxa_page.fill_out_signup(email)
